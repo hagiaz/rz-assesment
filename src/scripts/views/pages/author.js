@@ -1,16 +1,11 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable max-len */
-/* eslint-disable no-unused-vars */
-import TheMovieDbSource from '../../data/themoviedb-source';
-import {createMovieItemTemplate} from '../templates/template-creator';
 
 const Author = {
   async render() {
     return `
         <div class="content">
           <h2 class="content__heading">Author</h2>
-          <div id="movies" class="movies">
-          </div>
         </div>
         <section class="home" id="home">
                 <div class="home__container container grid">
