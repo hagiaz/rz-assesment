@@ -9,4 +9,7 @@
 ## Build Project
 
 1. `npm run build`
-2. `npm run serve`
+2. `npm run serve`'
+
+## Notes
+Based on my previous project https://github.com/hagiaz/movie-catalogue
