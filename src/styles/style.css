@@ -517,6 +517,7 @@
     }
      .home__data {
          grid-column: initial;
+         text-align: left;
     }
      .home__img {
          order: 1;
