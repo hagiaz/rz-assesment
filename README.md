@@ -2,7 +2,9 @@
 
 1. `git pull`
 2. `npm install`
-3. `npm run start-dev`
+
+## Development
+1. `npm run start-dev`
 
 ## Build Project
 

@@ -17,7 +17,7 @@ const Jikan = {
   },
 
   async afterRender(page = 1) {
-    const LIMIT = 10;
+    const LIMIT = 20;
     try {
       const response = await JikanSource.fetchMovies();
       const animeList = response.map((item) => item.entry).flat();
