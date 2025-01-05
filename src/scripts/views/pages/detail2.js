@@ -1,9 +1,9 @@
 /* eslint-disable linebreak-style */
 import UrlParser from '../../routes/url-parser';
-import OMDbSource from '../../data/omdb-source';
-import {createMovieDetailTemplate} from '../templates/template-creator';
+import JikanSource from '../../data/jikan-source';
+import {createJikanDetailTemplate} from '../templates/template-creator';
 
-const Detail = {
+const Detail2 = {
   async render() {
     return `
       <div id="movie" class="movie"></div>
@@ -13,13 +13,13 @@ const Detail = {
   async afterRender() {
     try {
       const url = UrlParser.parseActiveUrlWithoutCombiner();
-      const movie = await OMDbSource.detailOMDB(url.id);
+      const movie = await JikanSource.detailJikan(url.id);
       const movieContainer = document.querySelector('#movie');
-      movieContainer.innerHTML = createMovieDetailTemplate(movie);
+      movieContainer.innerHTML = createJikanDetailTemplate(movie);
     } catch (error) {
-      console.error('Error rendering movie detail:', error);
+      console.error('Error rendering movie details:', error);
     }
   },
 };
 
-export default Detail;
+export default Detail2;

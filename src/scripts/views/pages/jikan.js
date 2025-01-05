@@ -1,14 +1,14 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable max-len */
 /* eslint-disable new-cap */
-import OMDbSource from '../../data/omdb-source';
-import {createMovieItemTemplate} from '../templates/template-creator';
+import JikanSource from '../../data/jikan-source';
+import {createJikanItemTemplate} from '../templates/template-creator';
 
-const Omdb = {
+const Jikan = {
   async render() {
     return `
       <div class="content">
-        <h2 class="content__heading">Naruto (From OMDB)</h2>
+        <h2 class="content__heading">Anime List (From Jikan)</h2>
         <input type="text" id="searchInput" placeholder="Search titles..." class="search-input"/>
         <div id="movies" class="movies"></div>
         <div id="pagination" class="pagination"></div>
@@ -17,36 +17,41 @@ const Omdb = {
   },
 
   async afterRender(page = 1) {
+    const LIMIT = 10;
     try {
-      const response = await OMDbSource.OMDBmovie(page);
-      const movies = response.Search;
+      const response = await JikanSource.fetchMovies();
+      const animeList = response.map((item) => item.entry).flat();
+
+      const startIndex = (page - 1) * LIMIT;
+      const endIndex = page * LIMIT;
+      const paginatedAnime = animeList.slice(startIndex, endIndex);
 
       const searchInput = document.querySelector('#searchInput');
       searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase();
-        const filteredMovies = movies.filter((movie) => {
-          return movie.Title.toLowerCase().includes(query);
+        const filteredAnime = animeList.filter((anime) => {
+          return anime.title.toLowerCase().includes(query);
         });
-        renderMovies(filteredMovies, page);
+        renderAnime(filteredAnime.slice(startIndex, endIndex), page);
       });
 
-      const renderMovies = (movies, page) => {
+      const renderAnime = (animeList, page) => {
         const moviesContainer = document.querySelector('#movies');
         moviesContainer.innerHTML = '';
 
-        if (movies && movies.length > 0) {
-          movies.forEach((movie) => {
-            moviesContainer.innerHTML += createMovieItemTemplate(movie);
+        if (animeList && animeList.length > 0) {
+          animeList.forEach((anime) => {
+            moviesContainer.innerHTML += createJikanItemTemplate(anime);
           });
         } else {
-          moviesContainer.innerHTML = '<p>No movies found.</p>';
+          moviesContainer.innerHTML = '<p>No anime found.</p>';
         }
 
         const paginationContainer = document.querySelector('#pagination');
         paginationContainer.innerHTML = `
           <button class="pagination__button" id="previousPage" ${page <= 1 ? 'disabled' : ''}>Previous</button>
           <span>Page ${page}</span>
-          <button class="pagination__button" id="nextPage">Next</button>
+          <button class="pagination__button" id="nextPage" ${endIndex >= animeList.length ? 'disabled' : ''}>Next</button>
         `;
 
         document.querySelector('#previousPage').addEventListener('click', () => {
@@ -56,16 +61,17 @@ const Omdb = {
         });
 
         document.querySelector('#nextPage').addEventListener('click', () => {
-          this.afterRender(page + 1);
+          if (endIndex < animeList.length) {
+            this.afterRender(page + 1);
+          }
         });
       };
 
-      renderMovies(movies, page);
+      renderAnime(paginatedAnime, page);
     } catch (error) {
-      console.error('Error fetching movies:', error);
+      console.error('Error fetching anime:', error);
     }
   },
-
 };
 
-export default Omdb;
+export default Jikan;
