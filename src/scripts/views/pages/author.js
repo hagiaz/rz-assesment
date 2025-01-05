@@ -49,7 +49,7 @@ const Author = {
                 <div class="about__container container">
                     <div class="about__data">
                         <p class="about__description">
-                            I am Hagi Azzam Azzikri, an informatics engineering student at Singaperbangsa Karawang University. My study focuses on learning Web Development,
+                            I am Hagi Azzam Azzikri, a computer science Bachelor Freshgraduate from Singaperbangsa Karawang University. My study focuses on learning Web Development,
                             mainly Front-End Web Development. Beside that, i also currently learning UI/UX Design, Cloud Computing, and Machine Learning.
                         </p>
                     </div>

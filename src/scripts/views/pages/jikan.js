@@ -5,6 +5,9 @@ import JikanSource from '../../data/jikan-source';
 import {createJikanItemTemplate} from '../templates/template-creator';
 
 const Jikan = {
+  // Store the fetched data for pagination
+  animeList: [],
+
   async render() {
     return `
       <div class="content">
@@ -17,22 +20,24 @@ const Jikan = {
   },
 
   async afterRender(page = 1) {
-    const LIMIT = 20;
+    const LIMIT = 10;
     try {
-      const response = await JikanSource.fetchMovies();
-      const animeList = response.map((item) => item.entry).flat();
+      if (this.animeList.length === 0) {
+        const response = await JikanSource.fetchMovies();
+        this.animeList = response.map((item) => item.entry).flat();
+      }
 
       const startIndex = (page - 1) * LIMIT;
       const endIndex = page * LIMIT;
-      const paginatedAnime = animeList.slice(startIndex, endIndex);
+      const paginatedAnime = this.animeList.slice(startIndex, endIndex);
 
       const searchInput = document.querySelector('#searchInput');
       searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase();
-        const filteredAnime = animeList.filter((anime) => {
+        const filteredAnime = this.animeList.filter((anime) => {
           return anime.title.toLowerCase().includes(query);
         });
-        renderAnime(filteredAnime.slice(startIndex, endIndex), page);
+        renderAnime(filteredAnime.slice(startIndex, endIndex), page); // Apply limit after filtering
       });
 
       const renderAnime = (animeList, page) => {
@@ -51,7 +56,7 @@ const Jikan = {
         paginationContainer.innerHTML = `
           <button class="pagination__button" id="previousPage" ${page <= 1 ? 'disabled' : ''}>Previous</button>
           <span>Page ${page}</span>
-          <button class="pagination__button" id="nextPage" ${endIndex >= animeList.length ? 'disabled' : ''}>Next</button>
+          <button class="pagination__button" id="nextPage" ${endIndex >= this.animeList.length ? 'disabled' : ''}>Next</button>
         `;
 
         document.querySelector('#previousPage').addEventListener('click', () => {
@@ -61,7 +66,7 @@ const Jikan = {
         });
 
         document.querySelector('#nextPage').addEventListener('click', () => {
-          if (endIndex < animeList.length) {
+          if (endIndex < this.animeList.length) {
             this.afterRender(page + 1);
           }
         });
@@ -75,3 +80,4 @@ const Jikan = {
 };
 
 export default Jikan;
+

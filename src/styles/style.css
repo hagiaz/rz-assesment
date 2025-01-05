@@ -48,22 +48,24 @@
      position: absolute;
      top: 50px;
      left: -180px;
-     width: 150px;
+     width: fit-content;
      transition: all 0.3s;
      padding: 8px;
      background-color: white;
      overflow: hidden;
 }
+
  .app-bar .app-bar__navigation.open {
      left: 0;
 }
+
  .app-bar .app-bar__navigation ul li a {
      display: inline-block;
      text-decoration: none;
      color: black;
-     padding: 8px;
+     padding: 8px 0px;
      margin-bottom: 5px;
-     width: 100%;
+     width: fit-content;
 }
 /* Main Content */
  main {
